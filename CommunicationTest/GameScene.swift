@@ -13,14 +13,18 @@ import WatchConnectivity
 class GameScene : SKScene
 {
     var session : WCSession!
-    var isGameStarted : Bool = false
+    var isGameStarted : Bool = true
     var numLoops : Int = 0
+    var seconds : Int = 0
+    var lastCurrentTime : Int = 0
     
     var hpLabel : SKLabelNode!
     var hungerLabel : SKLabelNode!
+    var feedBtn : SKLabelNode!
+    
     var pokemon : SKSpriteNode?
     
-    var hp : Double = 0
+    var hp : Double = 100
     var hunger : Double = 0
     
     override func didMove(to view: SKView)
@@ -46,13 +50,53 @@ class GameScene : SKScene
         self.hungerLabel.fontName = "Avenir"
         self.hungerLabel.zPosition = 102
         addChild(self.hungerLabel)
+        
+        // Add hunger label
+        self.feedBtn = SKLabelNode(text: "FEED")
+        self.feedBtn.position = CGPoint(x: 150, y: self.size.height - 180)
+        self.feedBtn.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
+        self.feedBtn.fontColor = UIColor.blue
+        self.feedBtn.fontSize = 22
+        self.feedBtn.fontName = "Avenir"
+        self.feedBtn.zPosition = 102
+        addChild(self.feedBtn)
+        
+        initWCSessionDelegate()
     }
     
     override func update(_ currentTime: TimeInterval)
     {
-        self.numLoops = self.numLoops + 1
-        self.sendGiveYourPokemonAName()
         self.movePokemon()
+        self.sendGiveYourPokemonAName()
+        
+        if self.isGameStarted
+        {
+            let now : Int = Int(currentTime)
+            
+            if now > self.lastCurrentTime
+            {
+                self.seconds = self.seconds + 1
+            }
+            
+            if self.seconds % 5 == 0
+            {
+                self.numLoops = self.numLoops + 1
+                
+                self.hunger = self.hunger + 10
+                
+                if self.hunger >= 80
+                {
+                    self.hp = self.hp - 5
+                }
+                
+                self.hungerLabel.text = "Hunger: \(self.hunger) %"
+                self.hpLabel.text = "HP: \(self.hp) %"
+                
+                self.seconds = 1
+            }
+            
+            self.lastCurrentTime = Int(currentTime)
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
@@ -61,6 +105,13 @@ class GameScene : SKScene
             return
         }
 
+        let touchPosition = CGPoint(x: mousePosition.x, y: mousePosition.y)
+        let touchRect = CGRect(x: mousePosition.x, y: mousePosition.y, width: 1, height: 1)
+        
+        if self.feedBtn.frame.intersects(touchRect)
+        {
+            self.feedPokemon()
+        }
         
     }
     
@@ -87,6 +138,26 @@ class GameScene : SKScene
             self.pokemon?.run(foreverAnimation)
         }
     }
+    
+    func feedPokemon()
+    {
+        self.hunger = self.hunger - 12
+        if self.hunger <= 0
+        {
+            self.hunger = 0
+        }
+        self.hungerLabel.text = "Hunger: \(self.hunger) %"
+    }
+    
+    func hibernate()
+    {
+        self.isGameStarted = false
+    }
+    
+    func wakeUpFromHibernation()
+    {
+        self.isGameStarted = true
+    }
 }
 
 // Extension for implement WCSessionDelegate
@@ -104,11 +175,35 @@ extension GameScene : WCSessionDelegate
         else { print("WC NOT supported!") }
     }
     
-    func session(_ session: WCSession, didReceiveMessage message: [String : Any])
-    {
-        print("PHONE: I received a message: \(message)")
-        let pokemonName = message["POKEMONNAME"] as! String
-        if pokemonName != "" { UserDefaults.standard.setValue(pokemonName, forKey: "POKEMONNAME") }
+//    func session(_ session: WCSession, didReceiveMessage message: [String : Any])
+//    {
+//        print("PHONE: I received a message: \(message)")
+//        let pokemonName = message["POKEMONNAME"] as! String
+//        if pokemonName != "" { UserDefaults.standard.setValue(pokemonName, forKey: "POKEMONNAME") }
+//        
+//        let action = message["ACTION"] as! String
+//        if action == "FEED" { self.feedPokemon() }
+//        if action == "HIBERNATE" { self.hibernate() }
+//        if action == "WAKEUPFROMHIBERNATE" { self.wakeUpFromHibernation() }
+//    }
+    
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+        
+        
+        // When a message is received from the watch, output a message to the UI
+        // NOTE: Since session() runs in background, you cannot directly update UI from the background thread.
+        // Therefore, you need to wrap any UI updates inside a DispatchQueue for it to work properly.
+        DispatchQueue.main.async {
+            print("PHONE: I received a message: \(message)")
+            let pokemonName = message["POKEMONNAME"] as? String
+            if pokemonName != "" { UserDefaults.standard.setValue(pokemonName, forKey: "POKEMONNAME") }
+            
+            let action = message["ACTION"] as? String
+            if action == "FEED" { self.feedPokemon() }
+            if action == "HIBERNATE" { self.hibernate() }
+            if action == "WAKEUPFROMHIBERNATE" { self.wakeUpFromHibernation() }
+        }
+        
     }
     
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) { print("GameScene - session") }

@@ -18,6 +18,11 @@
                                 <action selector="okPokemonName" destination="AgC-eL-Hgc" id="Hh5-RT-DdK"/>
                             </connections>
                         </button>
+                        <button width="1" alignment="left" title="FEED" id="LKI-aS-mHu">
+                            <connections>
+                                <action selector="feedPokemon" destination="AgC-eL-Hgc" id="PeE-sl-dxH"/>
+                            </connections>
+                        </button>
                     </items>
                     <connections>
                         <outlet property="btnPokemon" destination="6Ad-5K-YBt" id="M5B-Zo-MxQ"/>

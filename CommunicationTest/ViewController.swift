@@ -58,16 +58,16 @@ class ViewController: UIViewController, WCSessionDelegate  {
         
         // 1. Check if phone supports WCSessions
         print("view loaded")
-        if WCSession.isSupported() {
-            //outputLabel.insertText("\nPhone supports WCSession")
-            WCSession.default.delegate = self
-            WCSession.default.activate()
-            //outputLabel.insertText("\nSession activated")
-        }
-        else {
-            print("Phone does not support WCSession")
-            //outputLabel.insertText("\nPhone does not support WCSession")
-        }
+//        if WCSession.isSupported() {
+//            //outputLabel.insertText("\nPhone supports WCSession")
+//            WCSession.default.delegate = self
+//            WCSession.default.activate()
+//            //outputLabel.insertText("\nSession activated")
+//        }
+//        else {
+//            print("Phone does not support WCSession")
+//            //outputLabel.insertText("\nPhone does not support WCSession")
+//        }
         
         
     }
@@ -83,7 +83,7 @@ class ViewController: UIViewController, WCSessionDelegate  {
     @IBAction func sendMessageButtonPressed(_ sender: Any) {
         
         // 2. When person presses button, send message to watch
-        outputLabel.insertText("\nTrying to send message to watch")
+        //outputLabel.insertText("\nTrying to send message to watch")
         
         if (WCSession.default.isReachable) {
             let message = ["course": "MADT"]

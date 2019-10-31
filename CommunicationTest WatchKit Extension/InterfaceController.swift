@@ -99,4 +99,29 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             print("Phone is not reachable")
         }
     }
+    
+    @IBAction func feedPokemon()
+    {
+        print("send feed message")
+        if WCSession.default.isReachable
+        {
+            WCSession.default.sendMessage(
+                ["ACTION" : "FEED"],
+                replyHandler: {
+                    (_ replyMessage: [String: Any]) in
+                    // @TODO: Put some stuff in here to handle any responses from the PHONE
+                    print("Message sent, put something here if u are expecting a reply from the phone")
+                   
+            }, errorHandler: { (error) in
+                //@TODO: What do if you get an error
+                print("Error while sending message: \(error)")
+            })
+        }
+    }
+    
+    /*
+     if action == "FEED" { self.feedPokemon() }
+     if action == "HIBERNATE" { self.hibernate() }
+     if action == "WAKEUPFROMHIBERNATE" { self.wakeUpFromHibernation() }
+     */
 }
