@@ -13,7 +13,7 @@ import WatchConnectivity
 class GameScene : SKScene
 {
     var session : WCSession!
-    var isGameStarted : Bool = true
+    var isGameStarted : Bool = false
     var numLoops : Int = 0
     var seconds : Int = 0
     var secondsPassed : Int = 0
@@ -21,9 +21,11 @@ class GameScene : SKScene
     
     var hpLabel : SKLabelNode!
     var hungerLabel : SKLabelNode!
+    var gameOverLbl : SKLabelNode!
     var feedBtn : SKLabelNode!
     
     var pokemon : SKSpriteNode?
+    var isPokemonDead : Bool = false
     
     var hp : Double = 100
     var hunger : Double = 0
@@ -98,6 +100,23 @@ class GameScene : SKScene
             }
             
             self.lastCurrentTime = Int(currentTime)
+        }
+        
+        if self.hp <= 0
+        {
+            self.isPokemonDead = true
+            
+            // Add game over label
+            self.gameOverLbl = SKLabelNode(text: "GAME OVER")
+            self.gameOverLbl.position = CGPoint(x: 75, y: self.size.height - 300)
+            self.gameOverLbl.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
+            self.gameOverLbl.fontColor = UIColor.blue
+            self.gameOverLbl.fontSize = 40
+            self.gameOverLbl.fontName = "Avenir"
+            self.gameOverLbl.zPosition = 102
+            addChild(self.gameOverLbl)
+            
+            self.isGameStarted = false
         }
         
         self.sendInfoToWatch()
@@ -179,28 +198,13 @@ extension GameScene : WCSessionDelegate
         else { print("WC NOT supported!") }
     }
     
-//    func session(_ session: WCSession, didReceiveMessage message: [String : Any])
-//    {
-//        print("PHONE: I received a message: \(message)")
-//        let pokemonName = message["POKEMONNAME"] as! String
-//        if pokemonName != "" { UserDefaults.standard.setValue(pokemonName, forKey: "POKEMONNAME") }
-//        
-//        let action = message["ACTION"] as! String
-//        if action == "FEED" { self.feedPokemon() }
-//        if action == "HIBERNATE" { self.hibernate() }
-//        if action == "WAKEUPFROMHIBERNATE" { self.wakeUpFromHibernation() }
-//    }
-    
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
-        
-        
-        // When a message is received from the watch, output a message to the UI
-        // NOTE: Since session() runs in background, you cannot directly update UI from the background thread.
-        // Therefore, you need to wrap any UI updates inside a DispatchQueue for it to work properly.
         DispatchQueue.main.async {
             print("PHONE: I received a message: \(message)")
             let pokemonName = message["POKEMONNAME"] as? String
             if pokemonName != "" { UserDefaults.standard.setValue(pokemonName, forKey: "POKEMONNAME") }
+            
+            self.isGameStarted = true
             
             let action = message["ACTION"] as? String
             if action == "FEED" { self.feedPokemon() }
@@ -216,16 +220,6 @@ extension GameScene : WCSessionDelegate
     
     func sessionDidDeactivate(_ session: WCSession) { print("GameScene - sessionDidDeactivate") }
     
-    func sendPoints()
-    {
-//        if self.session.isReachable
-//        {
-//            self.session.sendMessage(["Points" : self.points], replyHandler: nil)
-//            print("Message with points: \(self.points)")
-//        }
-//        else { print("No message was sent.") }
-    }
-    
     func sendGiveYourPokemonAName()
     {
         if self.session.isReachable && ViewController.pokemonName == ""
@@ -238,7 +232,7 @@ extension GameScene : WCSessionDelegate
     {
         if self.session.isReachable
         {
-            self.session.sendMessage(["SECONDS" : self.secondsPassed, "POKEMONCHOICE" : ViewController.pokemonChoice], replyHandler: nil)
+            self.session.sendMessage(["SECONDS" : self.secondsPassed, "POKEMONCHOICE" : ViewController.pokemonChoice, "ISPOKEMONDEAD": self.isPokemonDead], replyHandler: nil)
         }
     }
 }

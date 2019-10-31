@@ -26,7 +26,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     @IBOutlet var wakbtn: WKInterfaceButton!
     @IBOutlet var labelPokemonInfo: WKInterfaceLabel!
     
-    var pokemonName : String = "-"
+    var pokemonName : String = ""
     // MARK: Delegate functions
     // ---------------------
 
@@ -42,39 +42,50 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         let pokemonChoice = message["POKEMONCHOICE"] as? String
         if pokemonChoice != ""
         {
-            self.txtPokemon.setHidden(false)
-            self.btnPokemon.setHidden(false)
+            if self.pokemonName == ""
+            {
+                self.txtPokemon.setHidden(false)
+                self.btnPokemon.setHidden(false)
+            }
             
             if pokemonChoice == "CATERPIE"
             {
+                print("CATERPIE")
                 self.pikimg.setHidden(true)
                 self.catimg.setHidden(false)
             }
             else
             {
+                print("PIKACHU")
                 self.pikimg.setHidden(false)
                 self.catimg.setHidden(true)
             }
         }
         
-        let seconds = message["SECONDS"] as? String
-        self.labelPokemonInfo.setText("\(self.pokemonName) is \(seconds) seconds old")
+        let seconds = message["SECONDS"] as? NSNumber
+        if seconds != nil { self.labelPokemonInfo.setText("\(self.pokemonName) is \(seconds ?? 0) seconds old") }
         
+        let gameOver = message["ISPOKEMONDEAD"] as? Bool
+        if gameOver != nil && gameOver!
+        {
+            self.labelPokemonInfo.setText("GAME OVER!")
+        }
     }
-    
-
-
     
     // MARK: WatchKit Interface Controller Functions
     // ----------------------------------
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
-        self.txtPokemon.setHidden(true)
-        self.btnPokemon.setHidden(true)
+        self.txtPokemon.setHidden(false)
+        self.btnPokemon.setHidden(false)
         self.wakbtn.setHidden(true)
         self.pikimg.setHidden(true)
         self.catimg.setHidden(true)
+
+        self.feedbtn.setHidden(true)
+        self.hibbtn.setHidden(true)
+        self.wakbtn.setHidden(true)
         
         
         // 1. Check if teh watch supports sessions
@@ -89,8 +100,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
-        
-        
     }
     
     override func didDeactivate() {
@@ -105,9 +114,10 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     {
         if WCSession.default.isReachable
         {
-            print("Attempting to send message to phone \(self.txtPokemon)")
+            print("Attempting to send message to phone \(self.txtPokemon.description)")
+            self.pokemonName = "Albert"
             WCSession.default.sendMessage(
-                ["POKEMONNAME" : self.txtPokemon],
+                ["POKEMONNAME" : self.txtPokemon.description],
                 replyHandler: {
                     (_ replyMessage: [String: Any]) in
                     // @TODO: Put some stuff in here to handle any responses from the PHONE
@@ -120,6 +130,10 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
 
             self.txtPokemon.setHidden(true)
             self.btnPokemon.setHidden(true)
+            
+            self.feedbtn.setHidden(false)
+            self.hibbtn.setHidden(false)
+            self.wakbtn.setHidden(true)
         }
         else {
             print("Phone is not reachable")
