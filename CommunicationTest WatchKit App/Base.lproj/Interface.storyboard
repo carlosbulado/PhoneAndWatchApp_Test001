@@ -1,39 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="13771" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
-    <device id="watch38" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="14868" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+    <device id="watch38"/>
     <dependencies>
         <deployment identifier="watchOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="13756"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="14643"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="Helvetica.ttc">
-            <string>Helvetica-Bold</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Interface Controller-->
         <scene sceneID="aou-V4-d1y">
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="CommunicationTest_WatchKit_App" customModuleProvider="target">
                     <items>
-                        <button width="1" alignment="left" title="Push " id="fzB-f5-y2S">
-                            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textField width="1" alignment="left" text="Pokemon's Name" id="JA0-3g-HJb"/>
+                        <button width="1" alignment="left" title="Send Name" id="6Ad-5K-YBt">
                             <connections>
-                                <action selector="buttonPressed" destination="AgC-eL-Hgc" id="EFk-bs-nx7"/>
+                                <action selector="okPokemonName" destination="AgC-eL-Hgc" id="Hh5-RT-DdK"/>
                             </connections>
                         </button>
-                        <label height="20" alignment="left" text="Label" numberOfLines="2" id="PMJ-75-bao">
-                            <fontDescription key="font" name="Helvetica-Bold" family="Helvetica" pointSize="13"/>
-                        </label>
                     </items>
                     <connections>
-                        <outlet property="messageLabel" destination="PMJ-75-bao" id="X1T-aZ-hg2"/>
+                        <outlet property="btnPokemon" destination="6Ad-5K-YBt" id="M5B-Zo-MxQ"/>
+                        <outlet property="txtPokemon" destination="JA0-3g-HJb" id="Dxk-vc-yg9"/>
                     </connections>
                 </controller>
             </objects>
+            <point key="canvasLocation" x="34" y="88"/>
         </scene>
     </scenes>
 </document>

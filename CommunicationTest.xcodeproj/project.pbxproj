@@ -19,6 +19,8 @@
 		05E95235236494EA00AA7287 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E95234236494EA00AA7287 /* InterfaceController.swift */; };
 		05E95237236494EA00AA7287 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E95236236494EA00AA7287 /* ExtensionDelegate.swift */; };
 		05E95239236494EA00AA7287 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05E95238236494EA00AA7287 /* Assets.xcassets */; };
+		27BEEDED236B24C10086250D /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEEDEC236B24C10086250D /* GameViewController.swift */; };
+		27BEEDEF236B25150086250D /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEEDEE236B25150086250D /* GameScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +82,8 @@
 		05E95236236494EA00AA7287 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		05E95238236494EA00AA7287 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		05E9523A236494EA00AA7287 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		27BEEDEC236B24C10086250D /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		27BEEDEE236B25150086250D /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +133,8 @@
 				05E95218236494EA00AA7287 /* Assets.xcassets */,
 				05E9521A236494EA00AA7287 /* LaunchScreen.storyboard */,
 				05E9521D236494EA00AA7287 /* Info.plist */,
+				27BEEDEC236B24C10086250D /* GameViewController.swift */,
+				27BEEDEE236B25150086250D /* GameScene.swift */,
 			);
 			path = CommunicationTest;
 			sourceTree = "<group>";
@@ -290,6 +296,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				05E95214236494EA00AA7287 /* ViewController.swift in Sources */,
+				27BEEDED236B24C10086250D /* GameViewController.swift in Sources */,
+				27BEEDEF236B25150086250D /* GameScene.swift in Sources */,
 				05E95212236494E900AA7287 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

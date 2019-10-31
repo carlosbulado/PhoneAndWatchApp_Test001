@@ -7,12 +7,17 @@
 //
 
 import UIKit
+import SpriteKit
 import WatchConnectivity
 
 class ViewController: UIViewController, WCSessionDelegate  {
 
     // MARK: Outlets
     @IBOutlet weak var outputLabel: UITextView!
+    public static var size = CGSize(width:2048, height:1536)
+    
+    public static var pokemonChoice : String = ""
+    public static var pokemonName : String = ""
     
     // MARK: Required WCSessionDelegate variables
     // ------------------------------------------
@@ -39,7 +44,7 @@ class ViewController: UIViewController, WCSessionDelegate  {
         // NOTE: Since session() runs in background, you cannot directly update UI from the background thread.
         // Therefore, you need to wrap any UI updates inside a DispatchQueue for it to work properly.
         DispatchQueue.main.async {
-            self.outputLabel.insertText("\nMessage Received: \(message)")
+            //self.outputLabel.insertText("\nMessage Received: \(message)")
         }
         
     }
@@ -54,14 +59,14 @@ class ViewController: UIViewController, WCSessionDelegate  {
         // 1. Check if phone supports WCSessions
         print("view loaded")
         if WCSession.isSupported() {
-            outputLabel.insertText("\nPhone supports WCSession")
+            //outputLabel.insertText("\nPhone supports WCSession")
             WCSession.default.delegate = self
             WCSession.default.activate()
-            outputLabel.insertText("\nSession activated")
+            //outputLabel.insertText("\nSession activated")
         }
         else {
             print("Phone does not support WCSession")
-            outputLabel.insertText("\nPhone does not support WCSession")
+            //outputLabel.insertText("\nPhone does not support WCSession")
         }
         
         
@@ -83,12 +88,22 @@ class ViewController: UIViewController, WCSessionDelegate  {
         if (WCSession.default.isReachable) {
             let message = ["course": "MADT"]
             WCSession.default.sendMessage(message, replyHandler: nil)
-            outputLabel.insertText("\nMessage sent to watch")
+            //outputLabel.insertText("\nMessage sent to watch")
         }
         else {
             print("PHONE: Cannot reach watch")
-            outputLabel.insertText("\nCannot reach watch")
+            //outputLabel.insertText("\nCannot reach watch")
         }
+    }
+    
+    @IBAction func pokemonChooseCaterpie(_ sender: Any) {
+        ViewController.pokemonChoice = "CATERPIE"
+        UserDefaults.standard.set("CATERPIE", forKey: "POKEMON")
+    }
+    
+    @IBAction func pokemonChoosePikachu(_ sender: Any) {
+        ViewController.pokemonChoice = "PIKACHU"
+        UserDefaults.standard.set("PIKACHU", forKey: "POKEMON")
     }
 }
 
