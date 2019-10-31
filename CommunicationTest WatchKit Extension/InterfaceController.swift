@@ -18,7 +18,15 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     // ---------------------
     @IBOutlet var txtPokemon: WKInterfaceTextField!
     @IBOutlet var btnPokemon: WKInterfaceButton!
+    @IBOutlet var feedbtn: WKInterfaceButton!
     
+    @IBOutlet var pikimg: WKInterfaceImage!
+    @IBOutlet var catimg: WKInterfaceImage!
+    @IBOutlet var hibbtn: WKInterfaceButton!
+    @IBOutlet var wakbtn: WKInterfaceButton!
+    @IBOutlet var labelPokemonInfo: WKInterfaceLabel!
+    
+    var pokemonName : String = "-"
     // MARK: Delegate functions
     // ---------------------
 
@@ -29,14 +37,29 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     // 3. Get messages from PHONE
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-        print("WATCH: Got message from Phone")
+        print("WATCH: Got message from Phone \(message)")
         // Message from phone comes in this format: ["course":"MADT"]
-        let isPokemonNameTBD = message["POKEMONCHOICE"] as! String
-        if isPokemonNameTBD != ""
+        let pokemonChoice = message["POKEMONCHOICE"] as? String
+        if pokemonChoice != ""
         {
-            self.txtPokemon.setEnabled(true)
-            self.btnPokemon.setEnabled(true)
+            self.txtPokemon.setHidden(false)
+            self.btnPokemon.setHidden(false)
+            
+            if pokemonChoice == "CATERPIE"
+            {
+                self.pikimg.setHidden(true)
+                self.catimg.setHidden(false)
+            }
+            else
+            {
+                self.pikimg.setHidden(false)
+                self.catimg.setHidden(true)
+            }
         }
+        
+        let seconds = message["SECONDS"] as? String
+        self.labelPokemonInfo.setText("\(self.pokemonName) is \(seconds) seconds old")
+        
     }
     
 
@@ -47,8 +70,11 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
-        self.txtPokemon.setEnabled(false)
-        self.btnPokemon.setEnabled(false)
+        self.txtPokemon.setHidden(true)
+        self.btnPokemon.setHidden(true)
+        self.wakbtn.setHidden(true)
+        self.pikimg.setHidden(true)
+        self.catimg.setHidden(true)
         
         
         // 1. Check if teh watch supports sessions
@@ -92,8 +118,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                 print("Error while sending message: \(error)")
             })
 
-            self.txtPokemon.setEnabled(false)
-            self.btnPokemon.setEnabled(false)
+            self.txtPokemon.setHidden(true)
+            self.btnPokemon.setHidden(true)
         }
         else {
             print("Phone is not reachable")
@@ -102,7 +128,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     @IBAction func feedPokemon()
     {
-        print("send feed message")
         if WCSession.default.isReachable
         {
             WCSession.default.sendMessage(
@@ -110,18 +135,56 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                 replyHandler: {
                     (_ replyMessage: [String: Any]) in
                     // @TODO: Put some stuff in here to handle any responses from the PHONE
-                    print("Message sent, put something here if u are expecting a reply from the phone")
+                    //print("Message sent, put something here if u are expecting a reply from the phone")
                    
             }, errorHandler: { (error) in
                 //@TODO: What do if you get an error
-                print("Error while sending message: \(error)")
+                //print("Error while sending message: \(error)")
             })
         }
     }
     
-    /*
-     if action == "FEED" { self.feedPokemon() }
-     if action == "HIBERNATE" { self.hibernate() }
-     if action == "WAKEUPFROMHIBERNATE" { self.wakeUpFromHibernation() }
-     */
+    @IBAction func HIBERNATE()
+    {
+        if WCSession.default.isReachable
+        {
+            WCSession.default.sendMessage(
+                ["ACTION" : "HIBERNATE"],
+                replyHandler: {
+                    (_ replyMessage: [String: Any]) in
+                    // @TODO: Put some stuff in here to handle any responses from the PHONE
+                    //print("Message sent, put something here if u are expecting a reply from the phone")
+                   
+            }, errorHandler: { (error) in
+                //@TODO: What do if you get an error
+                //print("Error while sending message: \(error)")
+            })
+            
+            self.feedbtn.setHidden(true)
+            self.hibbtn.setHidden(true)
+            self.wakbtn.setHidden(false)
+        }
+    }
+    
+    @IBAction func wakeUp()
+    {
+        if WCSession.default.isReachable
+        {
+            WCSession.default.sendMessage(
+                ["ACTION" : "WAKEUPFROMHIBERNATE"],
+                replyHandler: {
+                    (_ replyMessage: [String: Any]) in
+                    // @TODO: Put some stuff in here to handle any responses from the PHONE
+                    //print("Message sent, put something here if u are expecting a reply from the phone")
+                   
+            }, errorHandler: { (error) in
+                //@TODO: What do if you get an error
+                //print("Error while sending message: \(error)")
+            })
+            
+            self.feedbtn.setHidden(false)
+            self.hibbtn.setHidden(false)
+            self.wakbtn.setHidden(true)
+        }
+    }
 }

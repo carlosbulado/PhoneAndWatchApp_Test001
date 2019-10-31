@@ -12,8 +12,8 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="CommunicationTest_WatchKit_App" customModuleProvider="target">
                     <items>
-                        <textField width="1" alignment="left" text="Pokemon's Name" id="JA0-3g-HJb"/>
-                        <button width="1" alignment="left" title="Send Name" id="6Ad-5K-YBt">
+                        <textField width="1" alignment="left" hidden="YES" text="Pokemon's Name" id="JA0-3g-HJb"/>
+                        <button width="1" alignment="left" hidden="YES" title="Send Name" id="6Ad-5K-YBt">
                             <connections>
                                 <action selector="okPokemonName" destination="AgC-eL-Hgc" id="Hh5-RT-DdK"/>
                             </connections>
@@ -23,14 +23,41 @@
                                 <action selector="feedPokemon" destination="AgC-eL-Hgc" id="PeE-sl-dxH"/>
                             </connections>
                         </button>
+                        <label width="0.90000000000000002" alignment="left" textAlignment="center" id="xwv-cM-S0h"/>
+                        <group width="1" alignment="left" id="Skd-Go-ULl">
+                            <items>
+                                <imageView alignment="left" image="CATERPIE" id="fke-bs-j4i"/>
+                                <imageView alignment="left" image="PIKACHU" id="Lrh-hF-FDW"/>
+                            </items>
+                        </group>
+                        <button width="1" alignment="left" title="HIBERNATE" id="aZt-Sv-8Y3">
+                            <connections>
+                                <action selector="HIBERNATE" destination="AgC-eL-Hgc" id="ueS-30-Y0I"/>
+                            </connections>
+                        </button>
+                        <button width="1" alignment="left" title="WAKE UP" id="qGB-g5-Z4z">
+                            <connections>
+                                <action selector="wakeUp" destination="AgC-eL-Hgc" id="7Yz-s2-0S4"/>
+                            </connections>
+                        </button>
                     </items>
                     <connections>
                         <outlet property="btnPokemon" destination="6Ad-5K-YBt" id="M5B-Zo-MxQ"/>
+                        <outlet property="catimg" destination="fke-bs-j4i" id="FWx-BK-AIV"/>
+                        <outlet property="feedbtn" destination="LKI-aS-mHu" id="zdL-r8-Zt3"/>
+                        <outlet property="hibbtn" destination="aZt-Sv-8Y3" id="bPR-1E-Qxt"/>
+                        <outlet property="labelPokemonInfo" destination="xwv-cM-S0h" id="xx5-MM-N1L"/>
+                        <outlet property="pikimg" destination="Lrh-hF-FDW" id="CC2-o9-lmY"/>
                         <outlet property="txtPokemon" destination="JA0-3g-HJb" id="Dxk-vc-yg9"/>
+                        <outlet property="wakbtn" destination="qGB-g5-Z4z" id="jn9-QK-SnQ"/>
                     </connections>
                 </controller>
             </objects>
             <point key="canvasLocation" x="34" y="88"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="CATERPIE" width="64" height="64"/>
+        <image name="PIKACHU" width="64" height="64"/>
+    </resources>
 </document>

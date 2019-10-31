@@ -16,6 +16,7 @@ class GameScene : SKScene
     var isGameStarted : Bool = true
     var numLoops : Int = 0
     var seconds : Int = 0
+    var secondsPassed : Int = 0
     var lastCurrentTime : Int = 0
     
     var hpLabel : SKLabelNode!
@@ -76,6 +77,7 @@ class GameScene : SKScene
             if now > self.lastCurrentTime
             {
                 self.seconds = self.seconds + 1
+                self.secondsPassed = self.secondsPassed + 1
             }
             
             if self.seconds % 5 == 0
@@ -97,6 +99,8 @@ class GameScene : SKScene
             
             self.lastCurrentTime = Int(currentTime)
         }
+        
+        self.sendInfoToWatch()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
@@ -227,6 +231,14 @@ extension GameScene : WCSessionDelegate
         if self.session.isReachable && ViewController.pokemonName == ""
         {
             self.session.sendMessage(["POKEMONCHOICE" : ViewController.pokemonChoice], replyHandler: nil)
+        }
+    }
+    
+    func sendInfoToWatch()
+    {
+        if self.session.isReachable
+        {
+            self.session.sendMessage(["SECONDS" : self.secondsPassed, "POKEMONCHOICE" : ViewController.pokemonChoice], replyHandler: nil)
         }
     }
 }
